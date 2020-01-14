@@ -1,6 +1,11 @@
 import { Component, OnInit, Renderer } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
+import { HttpClient} from '@angular/common/http';
+import {DataService} from '../data/data.service';
+import {FormSettings} from '../data/form-settings';
+import {NgForm, NgModel} from '@angular/forms';
+
 @Component({
     selector: 'app-components',
     templateUrl: './components.component.html',
@@ -8,18 +13,33 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
     ngb-progressbar {
         margin-top: 5rem;
     }
+    .card-description {
+        text-align: justify;
+    }
     `]
 })
 
 export class ComponentsComponent implements OnInit {
+    emailURL = 'https://putsreq.com/gKTITiVjB7aQWlyzQrca';
     page = 4;
     page1 = 5;
     focus;
-    focus1;
-    focus2;
     date: {year: number, month: number};
     model: NgbDateStruct;
-    constructor( private renderer : Renderer) {}
+    originalUserSettings: FormSettings = {
+        name: 'Nome',
+        email: 'E-mail',
+        message: 'Mensagem'
+    };
+
+    // Copy the original user settings values
+    // in order to save the users data if he or she leaves or cancels the form
+    userSettings: FormSettings = { ...this.originalUserSettings};
+
+    // tslint:disable-next-line:comment-format
+    //constructor( private renderer : Renderer) {}
+    constructor( private dataService: DataService) {}
+
     isWeekend(date: NgbDateStruct) {
         const d = new Date(date.year, date.month - 1, date.day);
         return d.getDay() === 0 || d.getDay() === 6;
@@ -40,6 +60,20 @@ export class ComponentsComponent implements OnInit {
                 input_group[i].classList.remove('input-group-focus');
             });
         }
+    }
+
+    onSubmit(form: NgForm) {
+        console.log('on onSubmit: ', form.valid);
+
+        this.dataService.postUserSettingsForm(this.userSettings).subscribe(
+            result => console.log('sucess: ', result),
+            error => console.log('error: ', error)
+        );
+
+    }
+
+    onBlur(field: NgModel) {
+        console.log('on onBlur: ', field.valid);
     }
 
 }
