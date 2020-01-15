@@ -19,12 +19,13 @@
     font-size: $font-size-base;
     @include input-size($padding-base-vertical, $padding-label-horizontal, $height-base);
     @include box-shadow(none);
-    &:focus{
+    /*
+    &.input-group:focus{
            background-color: $white-bg;
            border: 1px solid $dark-gray;
            @include box-shadow(none);
            outline: 0 !important;
-    }
+    }*/
 
     &.no-border{
         border: medium none !important;

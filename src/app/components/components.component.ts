@@ -5,6 +5,7 @@ import { HttpClient} from '@angular/common/http';
 import {DataService} from '../data/data.service';
 import {FormSettings} from '../data/form-settings';
 import {NgForm, NgModel} from '@angular/forms';
+import {IAlert} from './notification/notification.component';
 
 @Component({
     selector: 'app-components',
@@ -15,6 +16,15 @@ import {NgForm, NgModel} from '@angular/forms';
     }
     .card-description {
         text-align: justify;
+    }
+    .field-error {
+        border:1px solid red;
+    }
+    .alert{
+        margin-bottom: 0;
+    }
+    .container .alert {
+        margin-top:30px;
     }
     `]
 })
@@ -27,31 +37,24 @@ export class ComponentsComponent implements OnInit {
     date: {year: number, month: number};
     model: NgbDateStruct;
     originalUserSettings: FormSettings = {
-        name: 'Nome',
-        email: 'E-mail',
-        message: 'Mensagem'
+        name: null,
+        email: null,
+        message: null
     };
 
     // Copy the original user settings values
     // in order to save the users data if he or she leaves or cancels the form
     userSettings: FormSettings = { ...this.originalUserSettings};
 
-    // tslint:disable-next-line:comment-format
-    //constructor( private renderer : Renderer) {}
+    public alerts: Array<IAlert> = [];
+    private postError = false;
+    private postErrorMessage = '';
+    private messageSent = false;
     constructor( private dataService: DataService) {}
 
-    isWeekend(date: NgbDateStruct) {
-        const d = new Date(date.year, date.month - 1, date.day);
-        return d.getDay() === 0 || d.getDay() === 6;
-    }
-
-    isDisabled(date: NgbDateStruct, current: {month: number}) {
-        return date.month !== current.month;
-    }
-
     ngOnInit() {
-        let input_group_focus = document.getElementsByClassName('form-control');
-        let input_group = document.getElementsByClassName('input-group');
+        const input_group_focus = document.getElementsByClassName('form-control');
+        const input_group = document.getElementsByClassName('input-group');
         for (let i = 0; i < input_group.length; i++) {
             input_group[i].children[0].addEventListener('focus', function (){
                 input_group[i].classList.add('input-group-focus');
@@ -62,13 +65,39 @@ export class ComponentsComponent implements OnInit {
         }
     }
 
+    onHttpError(errorResponse: any) {
+        console.log('Error: ', errorResponse );
+        this.postError = true;
+        this.postErrorMessage = errorResponse.message;
+    }
+
+    onMessageSent() {
+        console.log('sucess');
+
+        // Clean input fields
+        this.userSettings.name = null;
+        this.userSettings.email = null;
+        this.userSettings.message = null;
+
+        this.messageSent = true;
+
+    }
+
     onSubmit(form: NgForm) {
+
         console.log('on onSubmit: ', form.valid);
 
-        this.dataService.postUserSettingsForm(this.userSettings).subscribe(
-            result => console.log('sucess: ', result),
-            error => console.log('error: ', error)
-        );
+        if (form.valid) {
+            this.dataService.postUserSettingsForm(this.userSettings).subscribe(
+                result => this.onMessageSent(),
+                error => this.onHttpError(error)
+            );
+        }
+        // tslint:disable-next-line:one-line
+        else {
+            this.postError = true;
+            this.postErrorMessage = 'O formulário contêm erros';
+        }
 
     }
 
