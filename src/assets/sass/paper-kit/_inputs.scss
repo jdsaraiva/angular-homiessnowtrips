@@ -11,6 +11,13 @@
    @include placeholder($placeholder-gray,1);
 }
 
+.input-group:focus{
+  background-color: $white-bg;
+  border: 1px solid $dark-gray;
+  @include box-shadow(none);
+  outline: 0 !important;
+}
+
 .form-control {
     background-color: $white-bg;
     border: 1px solid $medium-gray;
@@ -19,13 +26,13 @@
     font-size: $font-size-base;
     @include input-size($padding-base-vertical, $padding-label-horizontal, $height-base);
     @include box-shadow(none);
-    /*
-    &.input-group:focus{
-           background-color: $white-bg;
-           border: 1px solid $dark-gray;
+
+    &:focus{
+           background-color: #f7f7f7;
+           border: 1px solid $medium-gray;
            @include box-shadow(none);
            outline: 0 !important;
-    }*/
+    }
 
     &.no-border{
         border: medium none !important;

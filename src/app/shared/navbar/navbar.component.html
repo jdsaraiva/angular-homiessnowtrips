@@ -9,6 +9,14 @@
         </div>
         <div class="navbar-collapse" id="navbarToggler">
             <ul class="navbar-nav ml-auto">
+
+                <nav class='navbar navbar-expand navbar-light bg-light'>
+                    <ul class='nav nav-pills'>
+                        <li><a class='nav-link' [routerLink]="['/home']">Home</a></li>
+                        <li><a class='nav-link' [routerLink]="['/quem-somos']">Quem Somos</a></li>
+                    </ul>
+                </nav>
+
                 <li class="nav-item" *ngIf="!isDocumentation()">
                     <a class="nav-link" rel="tooltip" title="Em breve" data-placement="bottom" href="#">
                         <i class="fa fa-facebook-square"></i>
@@ -22,8 +30,10 @@
                     </a>
                 </li>
                 <li class="nav-item" *ngIf="!isHome()">
-                    <a [routerLink]="['/home']" *ngIf="!isDocumentation()" class="nav-link"><i class="nc-icon nc-layout-11"></i>Components</a>
-                    <a [routerLink]="['/home']" *ngIf="isDocumentation()" class="nav-link">Back to Kit</a>
+                    <!--
+                    <a [routerLink]="['/home']" *ngIf="!isDocumentation()" class="nav-link">
+                        <i class="nc-icon nc-layout-11"></i>Components</a>
+                    <a [routerLink]="['/home']" *ngIf="isDocumentation()" class="nav-link">Back to Kit</a> -->
                 </li>
                 <li class="nav-item" *ngIf="isDocumentation()">
                     <a href="https://github.com/creativetimofficial/paper-kit-2-angular/issues?ref=pk2-free-local" target="_blank" class="nav-link">Have an issue</a>

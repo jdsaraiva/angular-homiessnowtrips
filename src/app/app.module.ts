@@ -13,6 +13,7 @@ import { ComponentsModule } from './components/components.module';
 import { ExamplesModule } from './examples/examples.module';
 
 import { HttpClientModule } from '@angular/common/http';
+import {QuemSomosComponent} from './components/quem-somos/quem-somos.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,9 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     NgbModule.forRoot(),
     FormsModule,
-    RouterModule,
+    RouterModule.forRoot([
+      {path: 'components/quem-somos', component: QuemSomosComponent}
+    ]),
     ComponentsModule,
     ExamplesModule,
     AppRoutingModule,
